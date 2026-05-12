@@ -1,0 +1,5 @@
+python-dotenv>=1.0.0
+# Adicione aqui o que sua automação precisa:
+# playwright>=1.45.0
+# requests
+# beautifulsoup4

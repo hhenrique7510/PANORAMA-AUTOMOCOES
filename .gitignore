@@ -9,3 +9,7 @@ automacoes/*/.env
 automacoes/*/out/
 automacoes/*/user_data/
 automacoes/*/errors.log
+automacoes/*/_dev/__pycache__/
+
+# Template — só commitar .env.example
+_template/.env
