@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+
+# Per-automation outputs and secrets
+automacoes/*/.env
+automacoes/*/out/
+automacoes/*/user_data/
+automacoes/*/errors.log
