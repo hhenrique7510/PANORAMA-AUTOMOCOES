@@ -1,4 +1,4 @@
-# Cadastro de Contratos a partir de PDFs
+# Anexar Contratos (PDFs no Panorama / SVD)
 
 Automação que percorre uma pasta de PDFs de contrato e, para cada um, encontra o contrato **já cadastrado** em [panoramafiscal.com.br/svd/contratos](https://panoramafiscal.com.br/svd/contratos) e **anexa o PDF** nele (abrindo a tela de edição `/svd/contrato/alterar/{id}`). Os contratos em geral já existem no sistema — o que falta é anexar o arquivo do contrato.
 
@@ -9,19 +9,20 @@ Automação que percorre uma pasta de PDFs de contrato e, para cada um, encontra
 1. **Lê** todos os PDFs da pasta indicada (`--pdf-dir` ou `PDF_DIR` no `.env`).
 2. **Extrai** de cada PDF (via `pdfplumber` + regex) os campos necessários: número do contrato, CNPJ/empresa, datas, valor.
 3. **Loga** no Panorama Fiscal (na `PANORAMA_URL`, a URL normal de entrada) e baixa a listagem atual, mapeando **número → ID** de cada contrato (o ID vem do link de alterar de cada linha).
-4. Para cada PDF, **casa** o número extraído com a listagem:
-   - se **encontra** → abre `/svd/contrato/alterar/{id}` e verifica se o `<input id="fileinput">` está presente na tela:
-     - **input presente** → ainda não tem PDF → anexa e salva (status `anexado`).
-     - **input ausente** → contrato já tem PDF anexado → pula (status `ja_anexado`).
-   - se **não encontra** → registra `nao_encontrado` e pula (não cria contrato novo por padrão; defina `PANORAMA_CRIAR_SE_NAO_EXISTIR=1` no `.env` pra criar o que faltar).
-5. **Gera** `out/report.csv`, `out/report.md` e atualiza o histórico cumulativo em `out/history.csv`.
+4. O número do contrato vem do **nome do arquivo** (`CONTRATO 00070-2026.pdf` → `00070/2026`), que é a fonte confiável — o texto do PDF cita outros números.
+5. Para cada PDF, **casa** o número (com ano) com a listagem:
+   - se **encontra** → abre `/svd/contrato/alterar/{id}`:
+     - se a tela mostra **"Baixar Contrato"** → já tem PDF → pula (`ja_anexado`).
+     - senão → seta o PDF no `#fileinput` e clica em **Salvar** (que faz upload + commit; o `confirm()` do site é aceito automaticamente). Depois **reabre a tela e confirma** que apareceu "Baixar Contrato" — só então marca `anexado` (sem isso dava falso positivo).
+   - se **não encontra** → `nao_encontrado` e pula (não cria contrato novo por padrão; `PANORAMA_CRIAR_SE_NAO_EXISTIR=1` ativa criação).
+6. **Gera** `out/report.csv`, `out/report.md` e atualiza o histórico em `out/history.csv`.
 
 ### Status possíveis no relatório
 
 | Status | Significa |
 |---|---|
 | `anexado` | PDF anexado com sucesso em contrato existente |
-| `ja_anexado` | Contrato existe, mas já tinha PDF (não havia `#fileinput` na edição) |
+| `ja_anexado` | Contrato existe e já tinha PDF (tela mostra "Baixar Contrato") |
 | `criado` | Contrato criado do zero + PDF anexado (precisa `PANORAMA_CRIAR_SE_NAO_EXISTIR=1`) |
 | `nao_encontrado` | Número não está na listagem; criação desativada |
 | `dry_run` | Faria a ação mas `--dry-run` impediu o save |
@@ -30,8 +31,8 @@ Automação que percorre uma pasta de PDFs de contrato e, para cada um, encontra
 ### Arquitetura
 
 ```
-cadastro-contratos-pdf/
-├── main.py           # CLI (--debug, --limit, --dry-run, --pdf-dir)
+anexar-contratos/
+├── main.py           # CLI (--debug, --limit, --dry-run, --pdf-dir, --only)
 ├── worker.py         # Playwright: login, listagem (número→id), anexar PDF
 ├── parser.py         # pdfplumber + regex (funções puras)
 ├── report.py         # gera CSV e Markdown em out/
