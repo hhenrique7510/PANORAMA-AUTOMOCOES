@@ -52,7 +52,7 @@ python3.14 -m venv .venv
 source .venv/bin/activate
 
 # 2) Instala dependências desta automação
-pip install -r automacoes/checado-de-validade-az/requirements.txt
+pip install -r automacoes/PANORAMA/checado-de-validade-az/requirements.txt
 
 # 3) Baixa o Chromium do Playwright (~150MB, uma vez só)
 python -m playwright install chromium
@@ -60,7 +60,7 @@ python -m playwright install chromium
 
 ### Configurar credenciais
 
-Edite `automacoes/checado-de-validade-az/.env`:
+Edite `automacoes/PANORAMA/checado-de-validade-az/.env`:
 
 ```env
 PANORAMA_URL=https://panoramafiscal.com.br/panorama_fiscal/
@@ -79,17 +79,17 @@ Para auditar outro mês/ano, troque `MES_ALVO` (dois dígitos) e `ANO_ALVO` (qua
 Sempre a partir da pasta da automação:
 
 ```bash
-cd automacoes/checado-de-validade-az
+cd automacoes/PANORAMA/checado-de-validade-az
 ```
 
 ### Modos de execução
 
 | Comando | O que faz | Quando usar |
 |---|---|---|
-| `../../.venv/bin/python audit.py --bots 1 --max-pages 1 --headed` | 1 bot, 1 página, janela visível | **Smoke test** — validar login e leitura |
-| `../../.venv/bin/python audit.py --bots 3 --max-pages 2 --headed` | 3 bots paralelos, 2 páginas, janelas visíveis | Validar paralelismo antes do run completo |
-| `../../.venv/bin/python audit.py --bots 3 --headed` | 3 bots, todas as páginas, janelas visíveis | Run completo acompanhando visualmente |
-| `../../.venv/bin/python audit.py --bots 3` | 3 bots, todas as páginas, **headless** | Run de produção (mais rápido) |
+| `../../../.venv/bin/python audit.py --bots 1 --max-pages 1 --headed` | 1 bot, 1 página, janela visível | **Smoke test** — validar login e leitura |
+| `../../../.venv/bin/python audit.py --bots 3 --max-pages 2 --headed` | 3 bots paralelos, 2 páginas, janelas visíveis | Validar paralelismo antes do run completo |
+| `../../../.venv/bin/python audit.py --bots 3 --headed` | 3 bots, todas as páginas, janelas visíveis | Run completo acompanhando visualmente |
+| `../../../.venv/bin/python audit.py --bots 3` | 3 bots, todas as páginas, **headless** | Run de produção (mais rápido) |
 
 ### Flags
 
@@ -157,7 +157,7 @@ Total de anomalias: **47** em **23** empresas.
 Tudo vai pra stdout. Pra salvar:
 
 ```bash
-../../.venv/bin/python audit.py --bots 3 2>&1 | tee out/run-$(date +%Y%m%d-%H%M).log
+../../../.venv/bin/python audit.py --bots 3 2>&1 | tee out/run-$(date +%Y%m%d-%H%M).log
 ```
 
 ---

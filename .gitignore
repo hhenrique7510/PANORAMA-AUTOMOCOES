@@ -4,12 +4,12 @@ __pycache__/
 *.pyo
 .DS_Store
 
-# Per-automation outputs and secrets
-automacoes/*/.env
-automacoes/*/out/
-automacoes/*/user_data/
-automacoes/*/errors.log
-automacoes/*/_dev/__pycache__/
+# Per-automation outputs and secrets (qualquer profundidade — ex: automacoes/SVD/anexar-contratos/)
+automacoes/**/.env
+automacoes/**/out/
+automacoes/**/user_data/
+automacoes/**/errors.log
+automacoes/**/_dev/__pycache__/
 
 # Template — só commitar .env.example
 _template/.env

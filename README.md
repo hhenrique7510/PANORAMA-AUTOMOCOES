@@ -59,13 +59,13 @@ A partir daqui, cada automação tem seu próprio README explicando o que instal
 source .venv/bin/activate
 
 # 2) Instale as dependências da automação que quer rodar
-pip install -r automacoes/checado-de-validade-az/requirements.txt
+pip install -r automacoes/PANORAMA/checado-de-validade-az/requirements.txt
 
 # 3) Se a automação usa Playwright (browser), baixe o Chromium
 python -m playwright install chromium
 
 # 4) Configure o .env da automação (copie do .env.example se houver)
-cd automacoes/checado-de-validade-az
+cd automacoes/PANORAMA/checado-de-validade-az
 # edite .env com as credenciais
 
 # 5) Rode — cada automação documenta seus próprios comandos no README
@@ -104,7 +104,8 @@ Mais detalhes em [`_template/INSTRUCOES.md`](_template/INSTRUCOES.md).
 
 | Pasta | O que faz | Status |
 |---|---|---|
-| [`checado-de-validade-az/`](automacoes/checado-de-validade-az/) | Audita o Panorama Fiscal: identifica tarefas com data de Confirmação fora de um mês/ano alvo. Roda com 3 bots em paralelo. | ✅ Funcionando |
+| [`checado-de-validade-az/`](automacoes/PANORAMA/checado-de-validade-az/) | Audita o Panorama Fiscal: identifica tarefas com data de Confirmação fora de um mês/ano alvo. Roda com 3 bots em paralelo. | ✅ Funcionando |
+| [`cadastro-contratos-pdf/`](automacoes/SVD/anexar-contratos/) | Lê PDFs de uma pasta, extrai número/empresa/datas/valor e cadastra no Panorama Fiscal os que ainda não existem, anexando o próprio PDF. | 🧪 Em validação |
 
 ---
 
