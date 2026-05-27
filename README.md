@@ -106,6 +106,8 @@ Mais detalhes em [`_template/INSTRUCOES.md`](_template/INSTRUCOES.md).
 |---|---|---|
 | [`checado-de-validade-az/`](automacoes/PANORAMA/checado-de-validade-az/) | Audita o Panorama Fiscal: identifica tarefas com data de Confirmação fora de um mês/ano alvo. Roda com 3 bots em paralelo. | ✅ Funcionando |
 | [`cadastro-contratos-pdf/`](automacoes/SVD/anexar-contratos/) | Lê PDFs de uma pasta, extrai número/empresa/datas/valor e cadastra no Panorama Fiscal os que ainda não existem, anexando o próprio PDF. | 🧪 Em validação |
+| [`cadastro-contratos-excel/`](automacoes/cadastro-contratos-excel/) | Lê planilha de gestão de contratos, filtra status=ADICIONAR e cria cada contrato no Panorama Fiscal preenchendo empresa/datas/valor/objeto. | 🧪 Em validação |
+| [`cadastro-empresas-excel/`](automacoes/cadastro-empresas-excel/) | Extrai as empresas da planilha de contratos e cadastra no Panorama (`/svd/empresas`) as que ainda não existem — usa a lupa da Receita p/ CNPJ. Pré-requisito do cadastro de contratos. | 🧪 Em validação |
 
 ---
 
