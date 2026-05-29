@@ -492,6 +492,21 @@ async def criar_contrato(page: Page, contrato: ContratoExcel, *, dry_run: bool =
         log.info("→ [passo 8/8] [DRY-RUN] NÃO salvando — contrato %s", contrato.numero)
         return
 
+    # IMPORTANTE: volta pra aba "Situação Cadastral" antes de clicar em Salvar.
+    # O botão Salvar SÓ persiste o contrato quando essa aba está ativa.
+    # Se ficar na aba "Objeto do Contrato", o save não dispara (URL fica em /salvar#).
+    try:
+        sit_tab = page.locator(
+            'a:has-text("Situação Cadastral"), button:has-text("Situação Cadastral"), '
+            'li:has-text("Situação Cadastral") a'
+        ).first
+        if await sit_tab.is_visible(timeout=1500):
+            await sit_tab.click()
+            await asyncio.sleep(0.5)
+            log.debug("   voltou pra aba Situação Cadastral antes do Salvar")
+    except Exception as e:
+        log.debug("   não consegui voltar pra aba Situação Cadastral: %s", e)
+
     # Ao clicar em Salvar o site dispara confirm("Você confirma cadastro.") e
     # depois um alert() de sucesso. Ambos são aceitos pelo handler registrado em
     # processar_contratos (page.on("dialog", ...)). Sem isso o confirm volta
@@ -501,7 +516,11 @@ async def criar_contrato(page: Page, contrato: ContratoExcel, *, dry_run: bool =
     if dialogs is not None:
         dialogs.clear()  # zera pra capturar só os diálogos deste Salvar
 
+    # Pega o Salvar do form principal (canto inferior direito), NÃO o
+    # "Incluir Objeto" da aba de objeto.
     save_btn = page.locator(
+        'div.tab-pane[id*="situacao" i]:not(.hidden) button:has-text("Salvar"), '
+        'form button:has-text("Salvar"):not(:has-text("Objeto")), '
         'button:has-text("Salvar"), input[type="submit"][value*="alvar" i]'
     ).first
     await save_btn.click()

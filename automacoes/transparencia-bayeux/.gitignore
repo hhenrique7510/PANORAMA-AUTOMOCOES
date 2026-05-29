@@ -1,0 +1,6 @@
+_dev/profile/
+_dev/snapshots/
+out/
+__pycache__/
+*.pyc
+.env
